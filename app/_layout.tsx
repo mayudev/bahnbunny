@@ -1,29 +1,40 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import CustomAppBar from "@/components/organisms/CustomAppBar";
+import { Cabin_400Regular, useFonts } from "@expo-google-fonts/cabin";
+import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
+import { Stack } from "expo-router";
+import { useColorScheme } from "react-native";
+import {
+  configureFonts,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from "react-native-paper";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const { theme } = useMaterial3Theme();
+  useFonts({ Cabin_400Regular });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  const paper = {
+    ...(colorScheme === "dark"
+      ? { ...MD3DarkTheme, colors: theme.dark }
+      : { ...MD3LightTheme, colors: theme.light }),
+    fonts: configureFonts({
+      config: {
+        fontFamily: "Cabin_400Regular",
+      },
+    }),
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+    <PaperProvider theme={paper}>
+      <Stack
+        screenOptions={{
+          header: (props) => <CustomAppBar {...props} />,
+        }}
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    </PaperProvider>
   );
 }

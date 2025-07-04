@@ -1,3 +1,4 @@
+import { getDepartures } from "@/lib/api/driver/vendo/departures";
 import { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { IconButton, List, Surface, Text, TextInput } from "react-native-paper";
@@ -12,6 +13,7 @@ export default function StationSearchButton({ label, onStationData }: Props) {
   const [visible, setVisible] = useState(false);
 
   const exit = () => {
+    getDepartures();
     setVisible(false);
   };
 

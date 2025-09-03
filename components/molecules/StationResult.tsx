@@ -3,11 +3,17 @@ import { List } from "react-native-paper";
 type Props = {
   name: string;
   type?: "station" | "place";
+  onPress: () => void;
 };
 
-export default function StationResult({ name, type = "station" }: Props) {
+export default function StationResult({
+  name,
+  type = "station",
+  onPress,
+}: Props) {
   return (
     <List.Item
+      onPress={onPress}
       left={(props) => (
         <List.Icon
           {...props}
